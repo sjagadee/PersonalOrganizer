@@ -1,9 +1,10 @@
 package com.hello.android.srinivas.personalorganizer;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,16 +13,23 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView toDoList;
     private ItemsAdapter adapter;
+    private Toolbar toolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // this toolbar is used to set the custom created app bar
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+
+
         toDoList = (RecyclerView) findViewById(R.id.toDoList);
         adapter = new ItemsAdapter(this, getData());
         toDoList.setAdapter(adapter);
         toDoList.setLayoutManager(new LinearLayoutManager(this));
+
 
     }
 
@@ -33,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         String[] titles = {"Srini", "Sandy", "Nandu", "Chalie",
                 "Bali", "Akki", "Nikki", "Sona", "Mona", "Su", "suni", "Dinesh", "Kishore"};
 
-        for(String text: titles) {
+        for (String text : titles) {
             Information current = new Information();
             current.iconId = icons[0];
             current.title = text;
