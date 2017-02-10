@@ -42,14 +42,16 @@ public class MainActivity extends AppCompatActivity {
 
         List<Information> data = new ArrayList<>();
 
+        // should change according the list input
+
         int[] icons = {R.mipmap.ic_launcher};
         String[] titles = {"Srini", "Sandy", "Nandu", "Chalie",
                 "Bali", "Akki", "Nikki", "Sona", "Mona", "Su", "suni", "Dinesh", "Kishore"};
 
         for (String text : titles) {
             Information current = new Information();
-            current.iconId = icons[0];
-            current.title = text;
+            current.itemName = "";
+            current.priorityName = "";
             data.add(current);
         }
         return data;

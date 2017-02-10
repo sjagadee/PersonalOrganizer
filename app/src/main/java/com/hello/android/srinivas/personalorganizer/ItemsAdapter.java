@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Collections;
@@ -34,8 +33,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Information current = data.get(position);
-        holder.listText.setText(current.title);
-        holder.listImage.setImageResource(current.iconId);
+        holder.listItem.setText(current.itemName);
+        holder.listPriority.setText(current.priorityName);
     }
 
     @Override
@@ -56,15 +55,15 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
      */
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView listText;
-        ImageView listImage;
+        TextView listItem;
+        TextView listPriority;
 
         public MyViewHolder(View itemView) {
 
             super(itemView);
 
-            listText = (TextView) itemView.findViewById(R.id.tvListText);
-            listImage = (ImageView) itemView.findViewById(R.id.ivListIcon);
+            listItem = (TextView) itemView.findViewById(R.id.tvItem);
+            listPriority = (TextView) itemView.findViewById(R.id.tvPriority);
         }
     }
 }

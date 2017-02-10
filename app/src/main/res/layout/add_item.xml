@@ -24,6 +24,7 @@
         android:textSize="20dp" />
 
     <EditText
+        android:id="@+id/item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/activity_horizontal_margin"
@@ -36,11 +37,11 @@
         android:text="Priority:"
         android:textSize="20dp" />
 
-    <EditText
+    <android.support.v7.widget.AppCompatSpinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/activity_horizontal_margin"
-        android:hint = "Priority"/>
+        android:id="@+id/priority_spinner">
+    </android.support.v7.widget.AppCompatSpinner>
 
     <Button
         android:layout_width="match_parent"

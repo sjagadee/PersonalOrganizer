@@ -6,7 +6,7 @@ package com.hello.android.srinivas.personalorganizer;
 
 public class Information {
 
-    int iconId;
-    String title;
+    String priorityName;
+    String itemName;
 
 }

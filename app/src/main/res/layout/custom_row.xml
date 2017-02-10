@@ -5,19 +5,19 @@
     android:layout_height="72dp"
     android:padding="8dp">
     
-    <ImageView
-        android:id="@+id/ivListIcon"
+    <TextView
+        android:id="@+id/tvPriority"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"
+        android:text="priority"
         android:layout_gravity="center_vertical"
         android:padding="8dp"/>
 
     <TextView
-        android:id="@+id/tvListText"
+        android:id="@+id/tvItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dummy Text"
+        android:text="Item"
         android:layout_gravity="center_vertical"
         android:padding="8dp"/>
 
