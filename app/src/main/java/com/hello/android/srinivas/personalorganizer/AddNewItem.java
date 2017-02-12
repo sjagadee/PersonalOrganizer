@@ -31,7 +31,6 @@ public class AddNewItem extends AppCompatActivity implements View.OnClickListene
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
-
         item = (EditText) findViewById(R.id.item);
         prioritySpinner = (Spinner) findViewById(R.id.priority_spinner);
 
@@ -39,9 +38,7 @@ public class AddNewItem extends AppCompatActivity implements View.OnClickListene
         prioritySpinner.setAdapter(adapter);
 
         addItem = (Button) findViewById(R.id.b_add_item);
-
         addItem.setOnClickListener(this);
-
     }
 
     @Override

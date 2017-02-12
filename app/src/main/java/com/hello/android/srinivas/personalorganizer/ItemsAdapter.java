@@ -1,6 +1,7 @@
 package com.hello.android.srinivas.personalorganizer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +18,11 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
 
     private LayoutInflater inflater;
     List<Information> data  = Collections.emptyList();
+    private Context context;
 
     public ItemsAdapter (Context context, List<Information> data) {
         inflater  = LayoutInflater.from(context);
+        this.context = context;
         this.data = data;
     }
 
@@ -32,7 +35,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Information current = data.get(position);
+        final Information current = data.get(position);
         holder.listItem.setText(current.itemName);
         holder.listPriority.setText(current.priorityName);
 
@@ -40,9 +43,17 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
             @Override
             public void onItemClick(int pos) {
                 // here I need to open detailed activity and do whatever I want
+
+                Intent intent  = new Intent(context, EditOrDeleteItem.class);
+
+                intent.putExtra("item", current.getItemName());
+                intent.putExtra("priority", current.getPriorityName());
+                intent.putExtra("position", pos);
+
+                ((MainActivity) context).startActivityForResult(intent, 111);
+
             }
         });
-
     }
 
     @Override
@@ -70,9 +81,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
         public MyViewHolder(View itemView) {
 
             super(itemView);
-
             listItem = (TextView) itemView.findViewById(R.id.tvItem);
             listPriority = (TextView) itemView.findViewById(R.id.tvPriority);
+
+            itemView.setOnClickListener(this);
 
         }
 

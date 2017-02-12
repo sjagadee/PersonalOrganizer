@@ -11,19 +11,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class MainActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
     private RecyclerView toDoList;
     private ItemsAdapter adapter;
     private crudOperation crud;
-
-
-    private Toolbar toolbar;
-    private Intent intent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,8 +28,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
-        intent = getIntent();
-
+        // Set up recycle view
         toDoList = (RecyclerView) findViewById(R.id.toDoList);
         toDoList.setLayoutManager(new LinearLayoutManager(this));
         toDoList.setItemAnimator(new DefaultItemAnimator());
@@ -44,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ItemsAdapter(this, crud.getInformations());
 
         //toDoList.setAdapter(adapter);
-
-
 
     }
 
@@ -59,23 +50,23 @@ public class MainActivity extends AppCompatActivity {
             if(crud.addNewInfo(information)) {
                 toDoList.setAdapter(adapter);
             }
+        } else if (requestCode == 111 && resultCode == RESULT_OK) {
+            int pos = data.getExtras().getInt("position");
+            String action = data.getStringExtra("action");
+            if(action.contains("Delete")) {
+                if(crud.deleteInfo(pos)){
+                    onResume();
+                }
+            } else if (action.contains("Update")) {
+                Information information = new Information();
+                information.setItemName(data.getStringExtra("item"));
+                information.setPriorityName(data.getStringExtra("priority"));
+
+                if(crud.updateInfo(pos, information)) {
+                    toDoList.setAdapter(adapter);
+                }
+            }
         }
-    }
-
-    public static List<Information> getData(Intent intent) {
-
-        List<Information> data = new ArrayList<>();
-
-        String item = intent.getStringExtra("item");
-        String priority = intent.getStringExtra("priority");
-
-        Information current = new Information();
-        current.itemName = item;
-        current.priorityName = priority;
-        data.add(current);
-
-        return data;
-
     }
 
     @Override
@@ -95,5 +86,12 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        toDoList.setAdapter(adapter);
     }
 }
