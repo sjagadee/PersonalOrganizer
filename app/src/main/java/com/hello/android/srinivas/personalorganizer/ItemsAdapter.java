@@ -35,6 +35,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
         Information current = data.get(position);
         holder.listItem.setText(current.itemName);
         holder.listPriority.setText(current.priorityName);
+
+        holder.setItemClickListener(new ItemClickListener() {
+            @Override
+            public void onItemClick(int pos) {
+                // here I need to open detailed activity and do whatever I want
+            }
+        });
+
     }
 
     @Override
@@ -53,10 +61,11 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
      *
      * This is taken care by recycler view of creating it again and again
      */
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView listItem;
         TextView listPriority;
+        ItemClickListener itemClickListener;
 
         public MyViewHolder(View itemView) {
 
@@ -64,6 +73,16 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
 
             listItem = (TextView) itemView.findViewById(R.id.tvItem);
             listPriority = (TextView) itemView.findViewById(R.id.tvPriority);
+
+        }
+
+        public void setItemClickListener(ItemClickListener itemClickListener) {
+            this.itemClickListener = itemClickListener;
+        }
+
+        @Override
+        public void onClick(View v) {
+            this.itemClickListener.onItemClick(getLayoutPosition());
         }
     }
 }

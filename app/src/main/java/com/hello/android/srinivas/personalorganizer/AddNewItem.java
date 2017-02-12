@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 /**
  * Created by srinivas on 2/5/17.
@@ -30,12 +31,14 @@ public class AddNewItem extends AppCompatActivity implements View.OnClickListene
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
-        addItem = (Button) findViewById(R.id.add_item);
+
         item = (EditText) findViewById(R.id.item);
         prioritySpinner = (Spinner) findViewById(R.id.priority_spinner);
 
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.priority, android.R.layout.simple_spinner_dropdown_item);
         prioritySpinner.setAdapter(adapter);
+
+        addItem = (Button) findViewById(R.id.b_add_item);
 
         addItem.setOnClickListener(this);
 
@@ -43,11 +46,16 @@ public class AddNewItem extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        if(item.getText() != null && v.getId() == R.id.add_item) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("item", item.getText().toString());
-            intent.putExtra("priority", prioritySpinner.toString());
-            startActivity(intent);
+        if(v.getId() == R.id.b_add_item) {
+            if(item.getText() != null) {
+                Intent intent = new Intent(getApplicationContext() , MainActivity.class);
+                intent.putExtra("item", item.getText().toString());
+                intent.putExtra("priority", prioritySpinner.getSelectedItem().toString());
+                setResult(RESULT_OK, intent);
+                finish();
+            } else {
+                Toast.makeText(getApplicationContext(), "Enter data", Toast.LENGTH_LONG).show();
+            }
         }
     }
 }
