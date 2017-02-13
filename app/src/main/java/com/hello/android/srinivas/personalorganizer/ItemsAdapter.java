@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,13 +16,13 @@ import java.util.List;
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder> {
 
     private LayoutInflater inflater;
-    List<Information> data  = Collections.emptyList();
+    List<Information> information;
     private Context context;
 
     public ItemsAdapter (Context context, List<Information> data) {
         inflater  = LayoutInflater.from(context);
         this.context = context;
-        this.data = data;
+        this.information = data;
     }
 
     @Override
@@ -35,9 +34,9 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        final Information current = data.get(position);
-        holder.listItem.setText(current.itemName);
-        holder.listPriority.setText(current.priorityName);
+
+        holder.listItem.setText(information.get(position).itemName);
+        holder.listPriority.setText(information.get(position).priorityName);
 
         holder.setItemClickListener(new ItemClickListener() {
             @Override
@@ -46,9 +45,9 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
 
                 Intent intent  = new Intent(context, EditOrDeleteItem.class);
 
-                intent.putExtra("item", current.getItemName());
-                intent.putExtra("priority", current.getPriorityName());
-                intent.putExtra("position", pos);
+                intent.putExtra("item", information.get(pos).getItemName());
+                intent.putExtra("priority", information.get(pos).getPriorityName());
+                intent.putExtra("id", information.get(pos).getId());
 
                 ((MainActivity) context).startActivityForResult(intent, 111);
 
@@ -58,7 +57,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return information.size();
     }
 
     /**

@@ -24,7 +24,7 @@ public class EditOrDeleteItem extends AppCompatActivity implements View.OnClickL
     private Spinner prioritySpinnerEdit;
     private String itemName;
     private String priorityName;
-    private int position;
+    private int id;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class EditOrDeleteItem extends AppCompatActivity implements View.OnClickL
         Intent intent = this.getIntent();
         itemName = intent.getStringExtra("item");
         priorityName = intent.getStringExtra("priority");
-        position = intent.getExtras().getInt("position");
+        id = intent.getExtras().getInt("id");
 
         itemEdit.setText(itemName);
         prioritySpinnerEdit.setSelection(((ArrayAdapter<String>)prioritySpinnerEdit.getAdapter()).getPosition(priorityName));
@@ -65,7 +65,7 @@ public class EditOrDeleteItem extends AppCompatActivity implements View.OnClickL
                 intent.putExtra("item", itemEdit.getText().toString());
                 intent.putExtra("priority", prioritySpinnerEdit.getSelectedItem().toString());
                 intent.putExtra("action", "Update");
-                intent.putExtra("position", position);
+                intent.putExtra("id", id);
                 setResult(RESULT_OK, intent);
                 finish();
             } else {
@@ -75,7 +75,7 @@ public class EditOrDeleteItem extends AppCompatActivity implements View.OnClickL
         if(v.getId() == R.id.b_delete_item) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.putExtra("action", "Delete");
-            intent.putExtra("position", position);
+            intent.putExtra("id", id);
             setResult(RESULT_OK, intent);
             finish();
         }

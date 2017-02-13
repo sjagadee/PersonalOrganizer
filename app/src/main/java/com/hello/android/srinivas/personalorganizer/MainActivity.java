@@ -1,6 +1,7 @@
 package com.hello.android.srinivas.personalorganizer;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,6 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -17,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private RecyclerView toDoList;
     private ItemsAdapter adapter;
-    private crudOperation crud;
+    ArrayList<Information> info = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,38 +37,27 @@ public class MainActivity extends AppCompatActivity {
         toDoList.setLayoutManager(new LinearLayoutManager(this));
         toDoList.setItemAnimator(new DefaultItemAnimator());
 
-        crud = new crudOperation(InformationCollection.getInformation());
-        adapter = new ItemsAdapter(this, crud.getInformations());
+        adapter = new ItemsAdapter(this, info);
 
-        //toDoList.setAdapter(adapter);
+        retrieve();
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 999 && resultCode == RESULT_OK) {
-            Information information = new Information();
-            information.setItemName(data.getStringExtra("item"));
-            information.setPriorityName(data.getStringExtra("priority"));
-
-            if(crud.addNewInfo(information)) {
-                toDoList.setAdapter(adapter);
-            }
+            String item = data.getStringExtra("item");
+            String priority = data.getStringExtra("priority");
+            save(item, priority);
         } else if (requestCode == 111 && resultCode == RESULT_OK) {
-            int pos = data.getExtras().getInt("position");
+            int id = data.getExtras().getInt("id");
             String action = data.getStringExtra("action");
             if(action.contains("Delete")) {
-                if(crud.deleteInfo(pos)){
-                    onResume();
-                }
+                delete(id);
             } else if (action.contains("Update")) {
-                Information information = new Information();
-                information.setItemName(data.getStringExtra("item"));
-                information.setPriorityName(data.getStringExtra("priority"));
-
-                if(crud.updateInfo(pos, information)) {
-                    toDoList.setAdapter(adapter);
-                }
+                String item = data.getStringExtra("item");
+                String priority = data.getStringExtra("priority");
+                update(id, item,priority);
             }
         }
     }
@@ -88,10 +81,89 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    // Save the data in the database
+    private void save(String item, String priority) {
+        DatabaseAdapter db = new DatabaseAdapter(this);
 
-        toDoList.setAdapter(adapter);
+        // open database
+        db.openDatabase();
+
+        // insert into database
+        long result = db.addData(item, priority);
+
+        if(result >  0) {
+            Toast.makeText(getApplicationContext(), item +" Inserted Successfully", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), item +" Insert Unsuccessful", Toast.LENGTH_SHORT).show();
+        }
+        db.closeDatabase();
+
+        retrieve();
+    }
+
+    // retrieve data
+    private void retrieve() {
+        DatabaseAdapter db = new DatabaseAdapter(this);
+
+        // open database
+        db.openDatabase();
+
+        info.clear();
+
+        Cursor cursor = db.getAllInformation();
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            String item = cursor.getString(1);
+            String priority = cursor.getString(2);
+
+            Information i = new Information(id, item, priority);
+            info.add(i);
+
+            if(!info.isEmpty()) {
+                toDoList.setAdapter(adapter);
+            }
+
+        }
+    }
+
+    // update database
+    private void update(int id, String item, String priority) {
+        DatabaseAdapter db = new DatabaseAdapter(this);
+
+        // open database
+        db.openDatabase();
+
+        // insert into database
+        long result = db.updateData(id, item, priority);
+
+        if(result >  0) {
+            Toast.makeText(getApplicationContext(), item +" Updated Successfully", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), item +" Update Unsuccessful", Toast.LENGTH_SHORT).show();
+        }
+        db.closeDatabase();
+
+        retrieve();
+    }
+
+    // delete
+    private void delete(int id) {
+        DatabaseAdapter db = new DatabaseAdapter(this);
+
+        // open database
+        db.openDatabase();
+
+        // insert into database
+        long result = db.deleteData(id);
+
+        if(result >  0) {
+            Toast.makeText(getApplicationContext(), "Deleted Successfully", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Delete Unsuccessful", Toast.LENGTH_SHORT).show();
+        }
+        db.closeDatabase();
+
+        retrieve();
     }
 }
